@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+<h1>AI Expense Analyzer</h1>
+
+<form action="/add" method="post">
+    <input type="number" name="amount" placeholder="Amount" required>
+    <input type="text" name="category" placeholder="Category" required>
+    <input type="date" name="date" required>
+    <button type="submit">Add</button>
+</form>
+
+<div class="card total">
+    <h2>Total Spending</h2>
+    <p>₹{{ total }}</p>
+</div>
+
+<div class="card">
+    <h3>Expenses</h3>
+    <ul>
+        {% for exp in expenses %}
+        <li>
+            <span>{{ exp.amount }} | {{ exp.category }} | {{ exp.date }}</span>
+            <a href="/delete/{{ exp.id }}" class="delete-btn">🗑</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="card chart-card">
+    <h3>Spending Distribution</h3>
+    <div class="chart-box">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <h3>AI Insights</h3>
+    <ul>
+        {% for i in insights %}
+        <li>{{ i }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</div>
+
+<script>
+const labels = {{ category_data.keys() | list | tojson }};
+const values = {{ category_data.values() | list | tojson }};
+
+new Chart(document.getElementById('myChart'), {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: values
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+
+</body>
+</html>
