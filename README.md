@@ -18,3 +18,6 @@ A full-stack web application to track and analyze personal expenses with intelli
 pip install flask pandas  
 python app.py  
 http://127.0.0.1:5000
+
+## Author
+Shrey Darshan
